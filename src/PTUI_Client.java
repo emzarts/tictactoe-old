@@ -1,13 +1,24 @@
 
+import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
 public class PTUI_Client implements Observer {
 
+    PTUI_Client(String host, int port) {
+
+    }
+
     @Override
     public void update(Observable o, Object obj) {
 
+    }
+
+    public static void connect(String host, int port) {
+        System.out.println("Connecting to server on port " + port);
+        PTUI_Client client = new PTUI_Client(host, port);
     }
 
     public static void main(String[] args) {
@@ -19,12 +30,34 @@ public class PTUI_Client implements Observer {
             switch (sc.nextLine().toLowerCase()) {
 
                 case "a":
-                    System.out.println("Choice a");
-                    // TODO asks for a port number and host
+                    try {
+                        System.out.println("Start a game on what port? ");
+                        int port = sc.nextInt();
+                        String host = "localhost";
+                        Server s = new Server(port);
+
+                        connect(host, port);
+                    } catch (InputMismatchException e) {
+                        System.out.println("That is not a valid port number");
+                        begin = false;
+                    } catch (IOException e) {
+                        System.out.println("Cannot connect to that port");
+                        begin = false;
+                    }
                     // TODO starts a server on that port and waits for the other player
                     break;
                 case "b":
-                    System.out.println("Choice b");
+                    try {
+                        System.out.println("Join a game on what port? ");
+                        int portnum = sc.nextInt();
+                        String host = "localhost";
+
+                        connect(host, portnum);
+
+                    } catch (InputMismatchException e) {
+                        System.out.println("That is not a valid port number");
+                        begin = false;
+                    }
                     // Todo asks for the port and host to connect to
                     break;
                 case "c":
