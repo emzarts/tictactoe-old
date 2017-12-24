@@ -65,6 +65,8 @@ public class PTUI_Client implements Observer {
                     break;
                 default:
                     begin = false;
+                    Board butts = new Board();
+                    System.out.println(butts.toString());
                     System.out.println("Please type a, b, or c");
             }
         }
