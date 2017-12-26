@@ -10,15 +10,18 @@ import java.util.Observer;
 import java.util.Scanner;
 
 public class PTUI_Client implements Observer {
-    private Socket socket;
+
+    Socket socket;
     PrintWriter out;
     BufferedReader in;
+    Board board;
 
     PTUI_Client(String host, int port) throws IOException {
         this.socket = new Socket(host,port);
         this.out = new PrintWriter(socket.getOutputStream(), true);
         this.in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
+        this.board = new Board();
     }
 
     @Override
@@ -26,9 +29,15 @@ public class PTUI_Client implements Observer {
 
     }
 
+    public void run() throws IOException {
+        this.board.addObserver(this);
+
+    }
+
     public static void connect(String host, int port) throws IOException {
-        System.out.println("Connecting to server on port " + port);
+        System.out.println("Connecting to Tic Tac Toe game on port " + port);
         PTUI_Client client = new PTUI_Client(host, port);
+        client.run();
     }
 
     public static void main(String[] args) {
@@ -37,16 +46,16 @@ public class PTUI_Client implements Observer {
         boolean begin = false;
         while (!begin) {
             begin = true;
+            String host = "localhost";
+            int port = 0;
             switch (sc.nextLine().toLowerCase()) {
 
                 case "a":
                     try {
-                        System.out.print("Start a game on what port? ");
-                        int port = sc.nextInt();
-                        String host = "localhost";
+                        System.out.print("Start a Tic Tac Toe game on what port? ");
+                        port = sc.nextInt();
                         Server s = new Server(port);
                         s.start();
-                        connect(host, port);
                     } catch (InputMismatchException e) {
                         System.out.println("That is not a valid port number");
                         begin = false;
@@ -57,17 +66,10 @@ public class PTUI_Client implements Observer {
                     break;
                 case "b":
                     try {
-                        System.out.print("Join a game on what port? ");
-                        int portnum = sc.nextInt();
-                        String host = "localhost";
-
-                        connect(host, portnum);
-
+                        System.out.print("Join a Tic Tac Toe game on what port? ");
+                        port = sc.nextInt();
                     } catch (InputMismatchException e) {
                         System.out.println("That is not a valid port number");
-                        begin = false;
-                    } catch (IOException e) {
-                        System.out.println("Cannot connect to that port");
                         begin = false;
                     }
                     break;
@@ -77,6 +79,13 @@ public class PTUI_Client implements Observer {
                 default:
                     begin = false;
                     System.out.println("Please type a, b, or c");
+                    break;
+            }
+            try {
+                connect(host, port);
+            } catch (IOException e) {
+                System.out.println("Cannot connect to that port");
+                begin = false;
             }
         }
     }

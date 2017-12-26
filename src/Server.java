@@ -22,21 +22,26 @@ public class Server extends Thread {
     }
 
     public void run() {
-        System.out.println("Starting a game on port " + port);
         try {
             Socket client = server.accept();
             this.out =
                     new PrintWriter(client.getOutputStream(), true);
             this.in = new BufferedReader(
                     new InputStreamReader(client.getInputStream()));
-            System.out.println("first client connected");
+            System.out.println("Waiting for player two...");
 
             Socket client2 = server.accept();
-            this.out =
+            this.out2 =
                     new PrintWriter(client2.getOutputStream(), true);
-            this.in = new BufferedReader(
+            this.in2 = new BufferedReader(
                     new InputStreamReader(client2.getInputStream()));
-            System.out.println("second client connected");
+            System.out.println("Player two connected");
+
+            String line;
+            while ((line = in.readLine()) != null) {
+                System.out.println(line);
+                out.println(line);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

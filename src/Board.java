@@ -1,7 +1,8 @@
 import java.util.Arrays;
 import java.util.Observable;
 
-public class Board extends Observable{
+public class Board extends Observable {
+
     String[][] board = new String[3][3];
 
     Board() {
