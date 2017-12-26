@@ -11,12 +11,12 @@ import java.util.Scanner;
 
 public class PTUI_Client implements Observer {
 
-    Socket socket;
-    PrintWriter out;
-    BufferedReader in;
-    Board board;
+    private Socket socket;
+    private PrintWriter out;
+    private BufferedReader in;
+    private Board board;
 
-    PTUI_Client(String host, int port) throws IOException {
+    private PTUI_Client(String host, int port) throws IOException {
         this.socket = new Socket(host,port);
         this.out = new PrintWriter(socket.getOutputStream(), true);
         this.in = new BufferedReader(
@@ -29,12 +29,23 @@ public class PTUI_Client implements Observer {
 
     }
 
-    public void run() throws IOException {
+    private void run() throws IOException {
         this.board.addObserver(this);
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+
+        if (in.readLine().equals(Protocol.CONNECTED))
+            System.out.println("Connection sucessful\n" + board);
+        else System.exit(0);
+
+        String line;
+        while ((line = input.readLine()) != null) {
+            out.println(input);
+        }
+
 
     }
 
-    public static void connect(String host, int port) throws IOException {
+    private static void connect(String host, int port) throws IOException {
         System.out.println("Connecting to Tic Tac Toe game on port " + port);
         PTUI_Client client = new PTUI_Client(host, port);
         client.run();

@@ -3,7 +3,7 @@ import java.util.Observable;
 
 public class Board extends Observable {
 
-    String[][] board = new String[3][3];
+    private String[][] board = new String[3][3];
 
     Board() {
         for (int i = 0; i < this.board.length; i++) {
