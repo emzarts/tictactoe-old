@@ -11,13 +11,12 @@ import java.util.Scanner;
 
 public class PTUI_Client implements Observer {
 
-    private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
     private Board board;
 
     private PTUI_Client(String host, int port) throws IOException {
-        this.socket = new Socket(host,port);
+        Socket socket = new Socket(host,port);
         this.out = new PrintWriter(socket.getOutputStream(), true);
         this.in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
@@ -37,11 +36,33 @@ public class PTUI_Client implements Observer {
             System.out.println("Connection sucessful\n" + board);
         else System.exit(0);
 
-        String line;
-        while ((line = input.readLine()) != null) {
-            out.println(input);
-        }
+        Thread t = new Thread() {
+            public void run() {
+                System.out.println("STARTED");
+                String line;
+                try {
+                    while ((line = input.readLine()) != null) {
+                        String[] l = line.split(" ");
+                        if (l.length != 2) System.out.println("<row> <col>");
+                        //TODO make the move using the board object...
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.exit(0);
+                }
+            }
+        };
+        t.start();
 
+        String line;
+        while ((line = in.readLine()) != null) {
+            switch(line) {
+                case Protocol.MOVE_MADE:
+                    System.out.println("MOVE MADE");
+                    break;
+                // TODO handle all cases here
+            }
+        }
 
     }
 
