@@ -1,68 +1,36 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.InputMismatchException;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Scanner;
 
-// TODO after receiving move_made wait for input, after valid input stop waiting
+// TODO win, loss, and tied conditions
 
-public class PTUI_Client implements Observer {
+public class PTUI_Client {
 
     private PrintWriter out;
     private BufferedReader in;
     private Board board;
     private String me;
 
-    private PTUI_Client(String host, int port) throws IOException {
+    private PTUI_Client(String host, int port, String me) throws IOException {
         Socket socket = new Socket(host,port);
         this.out = new PrintWriter(socket.getOutputStream(), true);
         this.in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
         this.board = new Board();
-        this.me = "?";
-    }
-
-    @Override
-    public void update(Observable o, Object obj) {
-        System.out.println(board);
+        this.me = me;
     }
 
     private void run() throws IOException {
-        this.board.addObserver(this);
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-
         if (in.readLine().equals(Protocol.CONNECTED))
             System.out.println("Connection successful\n" + board);
         else System.exit(0);
 
-        // Thread to handle input
-        Thread t = new Thread() {
-            public void run() {
-                String line;
-                try {
-                    while ((line = input.readLine()) != null) {
-                        String[] l = line.split(" ");
-                        if (l.length != 2) System.out.println("<row> <col>");
-                        else
-                            if (board.isValidMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]))) {
-                                board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), me);
-                                System.out.println(board);
-                                out.println(Protocol.MAKE_MOVE);
-                                out.println(line);
-                            } else System.out.println("That move was not valid, please type <row> <col>");
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    System.exit(0);
-                }
-            }
-        };
-        t.start();
+        if (me.equals("X")) getMove();
+        else System.out.println("I AM PLAYER 2");
 
         String line;
         while ((line = in.readLine()) != null) {
@@ -74,18 +42,38 @@ public class PTUI_Client implements Observer {
                     if (me == "X") p = "O";
                     else p = "X";
                     board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), p);
-                    System.out.println(board);
+                    System.out.println("\n" + board);
+                    System.in.read(new byte[System.in.available()]); // Clears System.in
+                    getMove();
                     break;
-                // TODO handle all cases here
             }
         }
 
     }
 
+    private void getMove() throws IOException {
+        Scanner sc = new Scanner(System.in);
+        String line;
+        boolean cont = true;
+        while (cont) {
+            System.out.print("Your turn <row> <col>: ");
+            line = sc.nextLine();
+            String[] l = line.split(" ");
+            if (l.length != 2) System.out.println("<row> <col>");
+            else
+            if (board.isValidMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]))) {
+                board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), me);
+                System.out.println(board);
+                cont = false;
+                out.println(Protocol.MAKE_MOVE);
+                out.println(line);
+            } else System.out.println("That move was not valid, please type <row> <col>");
+        }
+    }
+
     private static void connect(String host, int port, String s) throws IOException {
         System.out.println("Connecting to Tic Tac Toe game on port " + port);
-        PTUI_Client client = new PTUI_Client(host, port);
-        client.me = s;
+        PTUI_Client client = new PTUI_Client(host, port, s);
         client.run();
     }
 
