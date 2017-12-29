@@ -20,6 +20,8 @@ public class Board extends Observable {
     public void makeMove(int row, int col) {
         if (isValidMove(row,col))
             this.board[row][col] = "?"; //TODO make symbol for player
+        //System.out.println(this);
+        //this.notifyObservers(); //TODO this does not work
     }
 
     @Override

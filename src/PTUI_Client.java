@@ -25,7 +25,7 @@ public class PTUI_Client implements Observer {
 
     @Override
     public void update(Observable o, Object obj) {
-
+        System.out.println(board);
     }
 
     private void run() throws IOException {
@@ -38,13 +38,18 @@ public class PTUI_Client implements Observer {
 
         Thread t = new Thread() {
             public void run() {
-                System.out.println("STARTED");
                 String line;
                 try {
                     while ((line = input.readLine()) != null) {
                         String[] l = line.split(" ");
                         if (l.length != 2) System.out.println("<row> <col>");
-                        //TODO make the move using the board object...
+                        else
+                            if (board.isValidMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]))) {
+                                board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
+                                System.out.println(board);
+                                out.println(Protocol.MAKE_MOVE);
+                                out.println(line);
+                            } else System.out.println("That move was not valid, please type <row> <col>");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

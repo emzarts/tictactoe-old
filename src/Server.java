@@ -36,15 +36,17 @@ public class Server extends Thread {
             out2.println(Protocol.CONNECTED);
 
             // Server receives input from the client and decides what to do with it
+
             String line;
             while ((line = in.readLine()) != null) {
-                if (line.equals(Protocol.MOVE_MADE)) {
-                    System.out.println("MOVE_MADE");
-                    this.board.notifyAll();
-                    this.board.notifyObservers();
-                    this.board.notify();
+                if (line.equals(Protocol.MAKE_MOVE)) {
+                    System.out.println("MAKE_MOVE");
+                    String move = in.readLine();
+                    String[] l = move.split(" ");
+                    board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
+                    this.board.notifyObservers(); //TODO this currently does nothing :D
                 }
-                out.println(line);
+
             }
 
         } catch (IOException e) {
