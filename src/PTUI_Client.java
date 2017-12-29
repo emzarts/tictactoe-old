@@ -16,6 +16,7 @@ public class PTUI_Client implements Observer {
     private PrintWriter out;
     private BufferedReader in;
     private Board board;
+    private String me;
 
     private PTUI_Client(String host, int port) throws IOException {
         Socket socket = new Socket(host,port);
@@ -23,6 +24,7 @@ public class PTUI_Client implements Observer {
         this.in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
         this.board = new Board();
+        this.me = "?";
     }
 
     @Override
@@ -48,7 +50,7 @@ public class PTUI_Client implements Observer {
                         if (l.length != 2) System.out.println("<row> <col>");
                         else
                             if (board.isValidMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]))) {
-                                board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
+                                board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), me);
                                 System.out.println(board);
                                 out.println(Protocol.MAKE_MOVE);
                                 out.println(line);
@@ -68,7 +70,10 @@ public class PTUI_Client implements Observer {
                 case Protocol.MOVE_MADE:
                     String move = in.readLine();
                     String[] l = move.split(" ");
-                    board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
+                    String p;
+                    if (me == "X") p = "O";
+                    else p = "X";
+                    board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), p);
                     System.out.println(board);
                     break;
                 // TODO handle all cases here
@@ -77,9 +82,10 @@ public class PTUI_Client implements Observer {
 
     }
 
-    private static void connect(String host, int port) throws IOException {
+    private static void connect(String host, int port, String s) throws IOException {
         System.out.println("Connecting to Tic Tac Toe game on port " + port);
         PTUI_Client client = new PTUI_Client(host, port);
+        client.me = s;
         client.run();
     }
 
@@ -91,6 +97,7 @@ public class PTUI_Client implements Observer {
             begin = true;
             String host = "localhost";
             int port = 0;
+            String st = "?";
             switch (sc.nextLine().toLowerCase()) {
 
                 case "a":
@@ -98,6 +105,7 @@ public class PTUI_Client implements Observer {
                         System.out.print("Start a Tic Tac Toe game on what port? ");
                         port = sc.nextInt();
                         Server s = new Server(port);
+                        st = "X";
                         s.start();
                     } catch (InputMismatchException e) {
                         System.out.println("That is not a valid port number");
@@ -111,6 +119,7 @@ public class PTUI_Client implements Observer {
                     try {
                         System.out.print("Join a Tic Tac Toe game on what port? ");
                         port = sc.nextInt();
+                        st = "O";
                     } catch (InputMismatchException e) {
                         System.out.println("That is not a valid port number");
                         begin = false;
@@ -125,7 +134,7 @@ public class PTUI_Client implements Observer {
                     break;
             }
             try {
-                connect(host, port);
+                connect(host, port, st);
             } catch (IOException e) {
                 System.out.println("Cannot connect to that port");
                 begin = false;

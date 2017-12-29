@@ -17,9 +17,9 @@ public class Board extends Observable {
         return (row < board.length && col < board.length && board[row][col] == "-");
     }
 
-    public void makeMove(int row, int col) {
+    public void makeMove(int row, int col, String s) {
         if (isValidMove(row,col))
-            this.board[row][col] = "?"; //TODO make symbol for player
+            this.board[row][col] = s; //TODO make symbol for player
         //System.out.println(this);
         //this.notifyObservers(); //TODO this does not work
     }

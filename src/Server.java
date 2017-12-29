@@ -44,7 +44,7 @@ public class Server extends Thread {
                             if (line.equals(Protocol.MAKE_MOVE)) {
                                 String move = in.readLine();
                                 String[] l = move.split(" ");
-                                board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
+                                board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), "X");
                                 out2.println(Protocol.MOVE_MADE);
                                 out2.println(move);
                             }
@@ -66,7 +66,7 @@ public class Server extends Thread {
                             if (line.equals(Protocol.MAKE_MOVE)) {
                                 String move = in2.readLine();
                                 String[] l = move.split(" ");
-                                board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
+                                board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), "O");
                                 out.println(Protocol.MOVE_MADE);
                                 out.println(move);
                             }
