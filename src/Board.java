@@ -1,9 +1,8 @@
 import java.util.Arrays;
-import java.util.Observable;
 
 public class Board {
 
-    String[][] board = new String[3][3];
+    private String[][] board = new String[3][3];
 
     Board() {
         for (int i = 0; i < this.board.length; i++) {
@@ -14,14 +13,12 @@ public class Board {
     }
 
     public boolean isValidMove(int row, int col) {
-        return (row < board.length && col < board.length && board[row][col] == "-");
+        return (row < board.length && col < board.length && board[row][col].equals("-"));
     }
 
     public void makeMove(int row, int col, String s) {
         if (isValidMove(row,col))
-            this.board[row][col] = s; //TODO make symbol for player
-        //System.out.println(this);
-        //this.notifyObservers(); //TODO this does not work
+            this.board[row][col] = s;
     }
 
     public String getStatus() {

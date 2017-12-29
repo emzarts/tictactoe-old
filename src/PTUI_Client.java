@@ -39,7 +39,7 @@ public class PTUI_Client {
                     String move = in.readLine();
                     String[] l = move.split(" ");
                     String p;
-                    if (me == "X") p = "O";
+                    if (me.equals("X")) p = "O";
                     else p = "X";
                     board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), p);
                     System.out.println("\n" + board);
