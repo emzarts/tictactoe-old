@@ -9,6 +9,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 
+// TODO after receiving move_made wait for input, after valid input stop waiting
+
 public class PTUI_Client implements Observer {
 
     private PrintWriter out;
@@ -33,9 +35,10 @@ public class PTUI_Client implements Observer {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
         if (in.readLine().equals(Protocol.CONNECTED))
-            System.out.println("Connection sucessful\n" + board);
+            System.out.println("Connection successful\n" + board);
         else System.exit(0);
 
+        // Thread to handle input
         Thread t = new Thread() {
             public void run() {
                 String line;
@@ -63,7 +66,10 @@ public class PTUI_Client implements Observer {
         while ((line = in.readLine()) != null) {
             switch(line) {
                 case Protocol.MOVE_MADE:
-                    System.out.println("MOVE MADE");
+                    String move = in.readLine();
+                    String[] l = move.split(" ");
+                    board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
+                    System.out.println(board);
                     break;
                 // TODO handle all cases here
             }

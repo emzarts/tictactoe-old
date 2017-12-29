@@ -35,19 +35,49 @@ public class Server extends Thread {
             out.println(Protocol.CONNECTED);
             out2.println(Protocol.CONNECTED);
 
-            // Server receives input from the client and decides what to do with it
-
-            String line;
-            while ((line = in.readLine()) != null) {
-                if (line.equals(Protocol.MAKE_MOVE)) {
-                    System.out.println("MAKE_MOVE");
-                    String move = in.readLine();
-                    String[] l = move.split(" ");
-                    board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
-                    this.board.notifyObservers(); //TODO this currently does nothing :D
+            // Thread for Client 1
+            Thread t1 = new Thread() {
+                public void run() {
+                    String line;
+                    try {
+                        while ((line = in.readLine()) != null) {
+                            if (line.equals(Protocol.MAKE_MOVE)) {
+                                String move = in.readLine();
+                                String[] l = move.split(" ");
+                                board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
+                                out2.println(Protocol.MOVE_MADE);
+                                out2.println(move);
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.exit(0);
+                    }
                 }
+            };
+            t1.start();
 
-            }
+            // Thread for Client 2
+            Thread t2 = new Thread() {
+                public void run() {
+                    String line;
+                    try {
+                        while ((line = in2.readLine()) != null) {
+                            if (line.equals(Protocol.MAKE_MOVE)) {
+                                String move = in2.readLine();
+                                String[] l = move.split(" ");
+                                board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]));
+                                out.println(Protocol.MOVE_MADE);
+                                out.println(move);
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.exit(0);
+                    }
+                }
+            };
+            t2.start();
 
         } catch (IOException e) {
             e.printStackTrace();
