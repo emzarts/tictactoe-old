@@ -10,10 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -25,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+// Todo add a cancel button
 public class GUI_Client extends Application {
 
     private PrintWriter out;
@@ -56,6 +54,31 @@ public class GUI_Client extends Application {
         final Group root = new Group(board);
         final Scene scene = new Scene(root, 300, 300, Color.WHITE);
 
+        // sets up port screen
+
+        BorderPane spo = new BorderPane();
+
+        TextField txtport = new TextField();
+        Text st = new Text("Start game on what port? ");
+        st.setFont(Font.font("Monospaced", 20));
+        st.setFill(Color.GRAY);
+        txtport.setStyle("-fx-border-width: 1; -fx-border-color: Gray; -fx-background-color: transparent;");
+        VBox form = new VBox(st, txtport);
+        spo.setCenter(form);
+
+        TextField txtport2 = new TextField();
+        BorderPane jpo = new BorderPane();
+        Text st2 = new Text("Join game on what port? ");
+        st2.setFont(Font.font("Monospaced", 20));
+        st2.setFill(Color.GRAY);
+        txtport2.setStyle("-fx-border-width: 1; -fx-border-color: Gray; -fx-background-color: transparent;");
+        VBox formj = new VBox(st2, txtport2);
+        jpo.setCenter(formj);
+        final Scene startportscreen = new Scene(spo, 300, 300, Color.WHITE);
+        final Scene joinportscreen  = new Scene(jpo, 300, 300, Color.WHITE);
+
+
+
         // Sets up the game initialization page
         Button start = new Button("Start a new game");
         start.setStyle("-fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;");
@@ -73,12 +96,12 @@ public class GUI_Client extends Application {
         join.setOnMouseEntered(e -> join.setStyle("-fx-cursor: hand; -fx-underline: true; -fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;"));
         join.setOnMouseExited(e -> join.setStyle("-fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;"));
 
+        start.setOnMousePressed(e -> s.setScene(startportscreen));
+        join.setOnMousePressed(e -> s.setScene(joinportscreen));
 
         VBox options = new VBox(start, join);
         Group ls = new Group(options);
         final Scene loginscreen = new Scene(ls, 300, 300, Color.WHITE);
-
-
 
         s.setTitle("Tic Tac Toe");
         s.setScene(loginscreen);
