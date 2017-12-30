@@ -3,6 +3,7 @@ import java.util.Arrays;
 public class Board {
 
     private String[][] board = new String[3][3];
+    private String status = "Tie";
 
     Board() {
         for (int i = 0; i < this.board.length; i++) {
@@ -24,6 +25,7 @@ public class Board {
     public String getStatus() {
         return null; // TODO
     }
+
     @Override
     public String toString() {
         return Arrays.toString(board[0]) + "\n" + Arrays.toString(board[1]) + "\n" + Arrays.toString(board[2]);

@@ -30,7 +30,6 @@ public class PTUI_Client {
         else System.exit(0);
 
         if (me.equals("X")) getMove();
-        else System.out.println("I AM PLAYER 2");
 
         String line;
         while ((line = in.readLine()) != null) {
@@ -83,6 +82,7 @@ public class PTUI_Client {
         boolean begin = false;
         while (!begin) {
             begin = true;
+
             String host = "localhost";
             int port = 0;
             String st = "?";
@@ -92,6 +92,9 @@ public class PTUI_Client {
                     try {
                         System.out.print("Start a Tic Tac Toe game on what port? ");
                         port = sc.nextInt();
+                        //System.out.print("What host? ");
+                        //Scanner scan = new Scanner(System.in);
+                        //host = scan.nextLine(); // 192.168.1.11
                         Server s = new Server(port);
                         st = "X";
                         s.start();
@@ -107,6 +110,9 @@ public class PTUI_Client {
                     try {
                         System.out.print("Join a Tic Tac Toe game on what port? ");
                         port = sc.nextInt();
+                        //System.out.print("What host? ");
+                        //Scanner scan = new Scanner(System.in);
+                        //host = scan.nextLine(); // 192.168.1.11
                         st = "O";
                     } catch (InputMismatchException e) {
                         System.out.println("That is not a valid port number");
