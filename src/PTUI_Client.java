@@ -6,9 +6,6 @@ import java.net.Socket;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-// TODO server needs to shut down after game ends
-// TODO remove unnecessary print statements
-
 public class PTUI_Client {
 
     private PrintWriter out;

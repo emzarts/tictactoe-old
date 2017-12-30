@@ -5,22 +5,16 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-
-// TODO win, loss, and tied conditions
-// TODO type q for quit
 
 public class GUI_Client extends Application {
 
@@ -31,35 +25,31 @@ public class GUI_Client extends Application {
 
     @Override
     public void init() {
-        //System.out.println("hhhh");
+        // TODO conect GUI to server here...
     }
 
     @Override
     public void start(Stage s) {
 
         // Set up the button grid representing the tic tac toe board
-        GridPane buttons = new GridPane();
+        GridPane board = new GridPane();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 Button btn = new Button();
-                btn.setPrefWidth(100);
-                btn.setPrefHeight(100);
+                btn.setStyle("-fx-border-color: Whitesmoke; -fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 80; -fx-font-family: Monospaced;");
+                btn.setMaxSize(100, 100);
+                btn.setPrefSize(100,100);
+                btn.setPadding(new Insets(0));
                 btn.setUserData(new int[] {i, j});
-                btn.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-
-                    }
-                });
-                buttons.add(btn, i, j);
+                board.add(btn, i, j);
             }
         }
 
         s.setTitle("Tic Tac Toe");
 
-        final Group root = new Group(buttons);
+        final Group root = new Group(board);
 
-        final Scene scene = new Scene(root, Color.DODGERBLUE);
+        final Scene scene = new Scene(root, Color.WHITE);
 
         //root.getChildren().add(text1);
 
