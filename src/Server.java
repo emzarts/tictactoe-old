@@ -45,6 +45,17 @@ public class Server extends Thread {
                                 String move = in.readLine();
                                 String[] l = move.split(" ");
                                 board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), "X");
+                                switch(board.getStatus()) {
+                                    case "X":
+                                        out.println(Protocol.GAME_WON);
+                                        break;
+                                    case "O":
+                                        out.println(Protocol.GAME_LOST);
+                                        break;
+                                    case "tie":
+                                        out.println(Protocol.GAME_TIED);
+                                        break;
+                                }
                                 out2.println(Protocol.MOVE_MADE);
                                 out2.println(move);
                             }
@@ -68,6 +79,17 @@ public class Server extends Thread {
                                 String move = in2.readLine();
                                 String[] l = move.split(" ");
                                 board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), "O");
+                                switch(board.getStatus()) {
+                                    case "X":
+                                        out.println(Protocol.GAME_LOST);
+                                        break;
+                                    case "O":
+                                        out.println(Protocol.GAME_WON);
+                                        break;
+                                    case "tie":
+                                        out.println(Protocol.GAME_TIED);
+                                        break;
+                                }
                                 out.println(Protocol.MOVE_MADE);
                                 out.println(move);
                             }

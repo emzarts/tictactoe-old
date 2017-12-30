@@ -6,8 +6,8 @@ import java.net.Socket;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-// TODO win, loss, and tied conditions
-// TODO type q for quit
+// TODO server needs to shut down after game ends
+// TODO remove unnecessary print statements
 
 public class PTUI_Client {
 
@@ -45,6 +45,18 @@ public class PTUI_Client {
                     System.out.println("\n" + board);
                     System.in.read(new byte[System.in.available()]); // Clears System.in
                     getMove();
+                    break;
+                case Protocol.GAME_WON:
+                    System.out.println("You won!");
+                    System.exit(1);
+                    break;
+                case Protocol.GAME_LOST:
+                    System.out.println("You lost :(");
+                    System.exit(1);
+                    break;
+                case Protocol.GAME_TIED:
+                    System.out.println("It was a tie");
+                    System.exit(1);
                     break;
             }
         }
