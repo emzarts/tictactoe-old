@@ -2,14 +2,23 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -44,16 +53,35 @@ public class GUI_Client extends Application {
                 board.add(btn, i, j);
             }
         }
+        final Group root = new Group(board);
+        final Scene scene = new Scene(root, 300, 300, Color.WHITE);
+
+        // Sets up the game initialization page
+        Button start = new Button("Start a new game");
+        start.setStyle("-fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;");
+        start.setPrefSize(300, 150);
+        Button join = new Button("Join an existing game");
+        join.setStyle("-fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;");
+        join.setPrefSize(300, 150);
+        /*Text or = new Text("Or");
+        or.setFill(Color.GRAY);
+        or.setFont(Font.font ("Monospaced", 15));*/
+
+        start.setOnMouseEntered(e -> start.setStyle("-fx-cursor: hand; -fx-underline: true; -fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;"));
+        start.setOnMouseExited(e -> start.setStyle("-fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;"));
+
+        join.setOnMouseEntered(e -> join.setStyle("-fx-cursor: hand; -fx-underline: true; -fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;"));
+        join.setOnMouseExited(e -> join.setStyle("-fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;"));
+
+
+        VBox options = new VBox(start, join);
+        Group ls = new Group(options);
+        final Scene loginscreen = new Scene(ls, 300, 300, Color.WHITE);
+
+
 
         s.setTitle("Tic Tac Toe");
-
-        final Group root = new Group(board);
-
-        final Scene scene = new Scene(root, Color.WHITE);
-
-        //root.getChildren().add(text1);
-
-        s.setScene(scene);
+        s.setScene(loginscreen);
         s.show();
     }
 
