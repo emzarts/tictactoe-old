@@ -7,6 +7,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 // TODO win, loss, and tied conditions
+// TODO type q for quit
 
 public class PTUI_Client {
 
@@ -47,7 +48,6 @@ public class PTUI_Client {
                     break;
             }
         }
-
     }
 
     private void getMove() throws IOException {
@@ -58,6 +58,7 @@ public class PTUI_Client {
             System.out.print("Your turn <row> <col>: ");
             line = sc.nextLine();
             String[] l = line.split(" ");
+            if (line.equals("q")) System.exit(1);
             if (l.length != 2) System.out.println("<row> <col>");
             else
             if (board.isValidMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]))) {
@@ -87,7 +88,6 @@ public class PTUI_Client {
             int port = 0;
             String st = "?";
             switch (sc.nextLine().toLowerCase()) {
-
                 case "a":
                     try {
                         System.out.print("Start a Tic Tac Toe game on what port? ");
