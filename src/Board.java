@@ -34,8 +34,6 @@ public class Board {
             }
         }
 
-        if (tie) return "tie";
-
         // diagonal from 0,0
         if (l[0].equals("X") && l[4].equals("X") && l[8].equals("X")) return "X";
         if (l[0].equals("O") && l[4].equals("O") && l[8].equals("O")) return "O";
@@ -58,10 +56,11 @@ public class Board {
         if (l[1].equals("X") && l[4].equals("X") && l[7].equals("X")) return "X";
         if (l[1].equals("O") && l[4].equals("O") && l[7].equals("O")) return "O";
         // third column
-        if (l[2].equals("X") && l[1].equals("X") && l[2].equals("X")) return "X";
-        if (l[0].equals("O") && l[1].equals("O") && l[2].equals("O")) return "O";
+        if (l[2].equals("X") && l[5].equals("X") && l[8].equals("X")) return "X";
+        if (l[2].equals("O") && l[5].equals("O") && l[8].equals("O")) return "O";
 
-        return "NONE"; // TODO
+        if (tie) return "tie";
+        return "NONE";
     }
 
     @Override

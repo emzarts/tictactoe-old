@@ -47,12 +47,15 @@ public class Server extends Thread {
                                 board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), "X");
                                 switch(board.getStatus()) {
                                     case "X":
+                                        out2.println(Protocol.GAME_LOST);
                                         out.println(Protocol.GAME_WON);
                                         break;
                                     case "O":
+                                        out2.println(Protocol.GAME_WON);
                                         out.println(Protocol.GAME_LOST);
                                         break;
                                     case "tie":
+                                        out2.println(Protocol.GAME_TIED);
                                         out.println(Protocol.GAME_TIED);
                                         break;
                                 }
@@ -81,12 +84,15 @@ public class Server extends Thread {
                                 board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), "O");
                                 switch(board.getStatus()) {
                                     case "X":
-                                        out.println(Protocol.GAME_LOST);
-                                        break;
-                                    case "O":
+                                        out2.println(Protocol.GAME_LOST);
                                         out.println(Protocol.GAME_WON);
                                         break;
+                                    case "O":
+                                        out2.println(Protocol.GAME_WON);
+                                        out.println(Protocol.GAME_LOST);
+                                        break;
                                     case "tie":
+                                        out2.println(Protocol.GAME_TIED);
                                         out.println(Protocol.GAME_TIED);
                                         break;
                                 }

@@ -72,14 +72,20 @@ public class PTUI_Client {
             String[] l = line.split(" ");
             if (line.equals("q")) System.exit(1);
             if (l.length != 2) System.out.println("<row> <col>");
-            else
-            if (board.isValidMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]))) {
-                board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), me);
-                System.out.println(board);
-                cont = false;
-                out.println(Protocol.MAKE_MOVE);
-                out.println(line);
-            } else System.out.println("That move was not valid, please type <row> <col>");
+            else {
+                try {
+                    if (board.isValidMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]))) {
+                        board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), me);
+                        System.out.println(board);
+                        cont = false;
+                        out.println(Protocol.MAKE_MOVE);
+                        out.println(line);
+                    } else System.out.println("That move was not valid, please type <row> <col>");
+                } catch (NumberFormatException e) {
+                    System.out.println("That move was not valid, please type <row> <col>");
+                    cont = false;
+                }
+            }
         }
     }
 
