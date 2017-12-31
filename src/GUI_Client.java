@@ -1,34 +1,18 @@
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 // Todo add a cancel button
 public class GUI_Client extends Application {
-
-    private PrintWriter out;
-    private BufferedReader in;
-    private Board board;
-    private String me;
 
     @Override
     public void init() {
@@ -59,6 +43,14 @@ public class GUI_Client extends Application {
         BorderPane spo = new BorderPane();
 
         TextField txtport = new TextField();
+        txtport.setOnAction(e -> {
+            try {
+                connect("localhost", Integer.parseInt(txtport.getText()), "X", s, scene); // Todo join with port here
+            } catch (IOException m) {
+                System.out.println("something bad happened");
+            }
+        });
+        txtport.setOnAction(e -> System.out.println("do the thing " + txtport.getText())); // Todo join with port here
         Text st = new Text("Start game on what port? ");
         st.setFont(Font.font("Monospaced", 20));
         st.setFill(Color.GRAY);
@@ -67,6 +59,13 @@ public class GUI_Client extends Application {
         spo.setCenter(form);
 
         TextField txtport2 = new TextField();
+        txtport2.setOnAction(e -> {
+                    try {
+                        connect("localhost", Integer.parseInt(txtport2.getText()), "O", s, scene); // Todo join with port here
+                    } catch (IOException m) {
+                        System.out.println("something bad happened");
+                    }
+                });
         BorderPane jpo = new BorderPane();
         Text st2 = new Text("Join game on what port? ");
         st2.setFont(Font.font("Monospaced", 20));
@@ -77,8 +76,6 @@ public class GUI_Client extends Application {
         final Scene startportscreen = new Scene(spo, 300, 300, Color.WHITE);
         final Scene joinportscreen  = new Scene(jpo, 300, 300, Color.WHITE);
 
-
-
         // Sets up the game initialization page
         Button start = new Button("Start a new game");
         start.setStyle("-fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;");
@@ -86,9 +83,6 @@ public class GUI_Client extends Application {
         Button join = new Button("Join an existing game");
         join.setStyle("-fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;");
         join.setPrefSize(300, 150);
-        /*Text or = new Text("Or");
-        or.setFill(Color.GRAY);
-        or.setFont(Font.font ("Monospaced", 15));*/
 
         start.setOnMouseEntered(e -> start.setStyle("-fx-cursor: hand; -fx-underline: true; -fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;"));
         start.setOnMouseExited(e -> start.setStyle("-fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 21; -fx-font-family: Monospaced;"));
@@ -108,11 +102,9 @@ public class GUI_Client extends Application {
         s.show();
     }
 
-    private void run() throws IOException {
-
-    }
-
-    private static void connect(String host, int port, String s) throws IOException {
+    private static void connect(String host, int port, String s, Stage stage, Scene sc) throws IOException {
+        TicTacGUI client = new TicTacGUI(host, port, s, stage, sc);
+        client.run();
     }
 
     public static void main(String[] args) {
