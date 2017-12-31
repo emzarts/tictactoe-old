@@ -4,11 +4,14 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import javax.swing.*;
 import java.io.IOException;
 
 // Todo add a cancel button
@@ -101,6 +104,7 @@ public class GUI_Client extends Application {
         final Scene loginscreen = new Scene(ls, 300, 300, Color.WHITE);
 
         s.setTitle("Tic Tac Toe");
+        s.getIcons().add(new Image("file:icons/icon1.png"));
         s.setScene(loginscreen);
         s.show();
     }
