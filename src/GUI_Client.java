@@ -32,7 +32,7 @@ public class GUI_Client extends Application {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 Button btn = new Button();
-                btn.setStyle("-fx-border-color: Whitesmoke; -fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 80; -fx-font-family: Monospaced;");
+                btn.setStyle("-fx-border-color: Lightgray; -fx-text-fill: Gray; -fx-border-width: 1; -fx-background-color: transparent; -fx-font-size: 80; -fx-font-family: Monospaced;");
                 btn.setMaxSize(100, 100);
                 btn.setPrefSize(100,100);
                 btn.setPadding(new Insets(0));

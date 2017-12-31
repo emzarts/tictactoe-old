@@ -3,8 +3,14 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,9 +26,10 @@ public class TicTacGUI {
     private Stage stage;
     private Scene sc;
     private Button[] buttons = new Button[9];
+    private Socket socket;
 
     public TicTacGUI(String host, int port, String me, Stage stage, Scene sc) throws IOException {
-        Socket socket = new Socket(host,port);
+        this.socket = new Socket(host,port);
         this.out = new PrintWriter(socket.getOutputStream(), true);
         this.in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
@@ -33,28 +40,37 @@ public class TicTacGUI {
     }
 
     public void run() throws IOException {
-        System.out.println("RUN");
-
+        stage.setScene(sc);
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: transparent");
+        final Group ro = (Group) sc.getRoot();
+        GridPane grid = (GridPane) ro.getChildren().get(0);
+        root.setCenter(grid);
+        root.setBottom(new Text("Connecting. . ."));
+        Scene s = new Scene(root,300, 310, Color.WHITE);
         if (in.readLine().equals(Protocol.CONNECTED))
-            stage.setScene(sc);
+            stage.setScene(s);
         else System.exit(0);
-
-        final Group root = (Group) sc.getRoot();
+        root.setBottom(new Text("Waiting for opponent. . ."));
         root.setDisable(true);
-        if (me.equals("X")) root.setDisable(false);
+        if (me.equals("X")) {
+            root.setBottom(new Text("Your turn. . ."));
+            root.setDisable(false);
+        }
 
-        GridPane grid = (GridPane) root.getChildren().get(0);
         int i = 0;
         for (Node n : grid.getChildren()) {
             Button b = (Button) n;
             b.setOnAction(e -> {
                 int[] data = (int[]) b.getUserData();
-                System.out.println(data[1] + " " + data[0]);
-                board.makeMove(data[1], data[0], me);
-                out.println(Protocol.MAKE_MOVE);
-                out.println(data[1] + " " + data[0]);
-                b.setText(me);
-                root.setDisable(true);
+                if (board.isValidMove(data[1], data[0])) {
+                    board.makeMove(data[1], data[0], me);
+                    out.println(Protocol.MAKE_MOVE);
+                    out.println(data[1] + " " + data[0]);
+                    b.setText(me);
+                    root.setBottom(new Text("Waiting for opponent. . ."));
+                    root.setDisable(true);
+                }
             });
             buttons[i] = b;
             i++;
@@ -75,24 +91,30 @@ public class TicTacGUI {
                                 board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), p);
                                 Platform.runLater(() -> refresh(Integer.parseInt(l[0]), Integer.parseInt(l[1])));
                                 root.setDisable(false);
+                                Platform.runLater(() -> root.setBottom(new Text("Your turn. . .")));
                                 System.in.read(new byte[System.in.available()]); // Clears System.in
                                 break;
                             case Protocol.GAME_WON:
-                                System.out.println("You won!");
-                                System.exit(1);
+                                System.out.println("you won");
+                                Platform.runLater(() ->root.setBottom(new Text("You won!")));
+                                root.setDisable(true);
                                 break;
                             case Protocol.GAME_LOST:
-                                System.out.println("You lost :(");
-                                System.exit(1);
+                                System.out.println("you lost");
+                                in.close();
+                                socket.close();
+                                root.setDisable(true);
+                                Platform.runLater(() -> root.setBottom(new Text("You lost :(")));
                                 break;
                             case Protocol.GAME_TIED:
-                                System.out.println("It was a tie");
-                                System.exit(1);
+                                System.out.println("that was a tie");
+                                Platform.runLater(() ->root.setBottom(new Text("It was a tie")));
+                                root.setDisable(true);
                                 break;
                         }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+
                 }
             }
         };
@@ -102,7 +124,6 @@ public class TicTacGUI {
     }
 
     private void refresh(int row, int col) {
-        System.out.println("REFRESH");
         buttons[(col * 3) + row].setText(this.board.getTile(row, col));
     }
 }
