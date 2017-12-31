@@ -3,14 +3,12 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -40,7 +38,14 @@ public class TicTacGUI {
     }
 
     public void run() throws IOException {
-        stage.setScene(sc);
+        BorderPane w = new BorderPane();
+        w.setStyle("-fx-background-color: transparent;");
+        Text txt = new Text("Waiting for player two...");
+        txt.setFill(Color.GRAY);
+        txt.setFont(Font.font("Monospaced", 20));
+        w.setTop(txt);
+        Scene waiting = new Scene(w, 300, 300, Color.WHITE);
+        stage.setScene(waiting);
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: transparent");
         final Group ro = (Group) sc.getRoot();
@@ -48,15 +53,28 @@ public class TicTacGUI {
         root.setCenter(grid);
         root.setBottom(new Text("Connecting. . ."));
         Scene s = new Scene(root,300, 310, Color.WHITE);
-        if (in.readLine().equals(Protocol.CONNECTED))
-            stage.setScene(s);
-        else System.exit(0);
+        Runnable r1 = new Runnable() {
+            public void run() {
+                try {
+                    if (in.readLine().equals(Protocol.CONNECTED))
+                        Platform.runLater(()->stage.setScene(s));
+                    else System.exit(0);
+
+                } catch (IOException e) {
+                    System.out.println("something went wrong");
+                }
+            }
+        };
+        Thread t1 = new Thread(r1);
+        t1.start();
+
         root.setBottom(new Text("Waiting for opponent. . ."));
         root.setDisable(true);
         if (me.equals("X")) {
             root.setBottom(new Text("Your turn. . ."));
             root.setDisable(false);
         }
+
 
         int i = 0;
         for (Node n : grid.getChildren()) {
@@ -95,19 +113,16 @@ public class TicTacGUI {
                                 System.in.read(new byte[System.in.available()]); // Clears System.in
                                 break;
                             case Protocol.GAME_WON:
-                                System.out.println("you won");
                                 Platform.runLater(() ->root.setBottom(new Text("You won!")));
                                 root.setDisable(true);
                                 break;
                             case Protocol.GAME_LOST:
-                                System.out.println("you lost");
                                 in.close();
                                 socket.close();
                                 root.setDisable(true);
                                 Platform.runLater(() -> root.setBottom(new Text("You lost :(")));
                                 break;
                             case Protocol.GAME_TIED:
-                                System.out.println("that was a tie");
                                 Platform.runLater(() ->root.setBottom(new Text("It was a tie")));
                                 root.setDisable(true);
                                 break;

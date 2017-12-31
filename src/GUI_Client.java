@@ -9,14 +9,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 // Todo add a cancel button
+// Todo fix GUI hang when starting a game
+// Todo help button/ menu
 public class GUI_Client extends Application {
 
     @Override
@@ -42,6 +39,7 @@ public class GUI_Client extends Application {
 
         // start new game
         BorderPane spo = new BorderPane();
+        spo.setStyle("-fx-background-color: transparent");
         TextField txtport = new TextField();
         txtport.setOnAction(e -> {
             try {
@@ -71,6 +69,7 @@ public class GUI_Client extends Application {
                     }
                 });
         BorderPane jpo = new BorderPane();
+        jpo.setStyle("-fx-background-color: transparent");
         Text st2 = new Text("Join game on what port? ");
         st2.setFont(Font.font("Monospaced", 20));
         st2.setFill(Color.GRAY);

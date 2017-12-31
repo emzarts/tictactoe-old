@@ -45,6 +45,8 @@ public class Server extends Thread {
                                 String move = in.readLine();
                                 String[] l = move.split(" ");
                                 board.makeMove(Integer.parseInt(l[0]), Integer.parseInt(l[1]), "X");
+                                out2.println(Protocol.MOVE_MADE);
+                                out2.println(move);
                                 switch(board.getStatus()) {
                                     case "X":
                                         out2.println(Protocol.GAME_LOST);
@@ -59,8 +61,7 @@ public class Server extends Thread {
                                         out.println(Protocol.GAME_TIED);
                                         break;
                                 }
-                                out2.println(Protocol.MOVE_MADE);
-                                out2.println(move);
+
                             }
                         }
                     } catch (IOException e) {
