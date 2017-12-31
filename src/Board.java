@@ -22,6 +22,9 @@ public class Board {
             this.board[row][col] = s;
     }
 
+    public String getTile(int row, int col) {
+        return board[row][col];
+    }
     public String getStatus() {
         String[] l = new String[9];
         boolean tie = true;
