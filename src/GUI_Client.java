@@ -20,11 +20,6 @@ import java.net.Socket;
 public class GUI_Client extends Application {
 
     @Override
-    public void init() {
-        // TODO conect GUI to server here...
-    }
-
-    @Override
     public void start(Stage s) {
 
         // Set up the button grid representing the tic tac toe board
@@ -45,17 +40,20 @@ public class GUI_Client extends Application {
 
         // sets up port screen
 
+        // start new game
         BorderPane spo = new BorderPane();
-
         TextField txtport = new TextField();
         txtport.setOnAction(e -> {
             try {
-                connect("localhost", Integer.parseInt(txtport.getText()), "X", s, scene); // Todo join with port here
-            } catch (IOException m) {
+                System.out.println("start a new game");
+                int port = Integer.parseInt(txtport.getText());
+                Server server = new Server(port);
+                server.start();
+                connect("localhost", port, "X", s, scene);
+            } catch (IOException| NumberFormatException m) {
                 System.out.println("something bad happened");
             }
         });
-        txtport.setOnAction(e -> System.out.println("do the thing " + txtport.getText())); // Todo join with port here
         Text st = new Text("Start game on what port? ");
         st.setFont(Font.font("Monospaced", 20));
         st.setFill(Color.GRAY);
@@ -63,10 +61,11 @@ public class GUI_Client extends Application {
         VBox form = new VBox(st, txtport);
         spo.setCenter(form);
 
+        // join a game
         TextField txtport2 = new TextField();
         txtport2.setOnAction(e -> {
                     try {
-                        connect("localhost", Integer.parseInt(txtport2.getText()), "O", s, scene); // Todo join with port here
+                        connect("localhost", Integer.parseInt(txtport2.getText()), "O", s, scene);
                     } catch (IOException m) {
                         System.out.println("something bad happened");
                     }

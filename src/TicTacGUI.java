@@ -114,7 +114,7 @@ public class TicTacGUI {
                         }
                     }
                 } catch (IOException e) {
-
+                    System.out.println("game ended");
                 }
             }
         };
