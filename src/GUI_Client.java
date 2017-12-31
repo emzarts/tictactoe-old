@@ -17,6 +17,9 @@ import java.io.IOException;
 // Todo add a cancel button
 // Todo fix GUI hang when starting a game
 // Todo help button/ menu
+// Todo close server when GUI is exited
+// Todo test stuff third move crashes??
+
 public class GUI_Client extends Application {
 
     @Override
